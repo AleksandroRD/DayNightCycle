@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -58,7 +57,7 @@ public class DayNightController : MonoBehaviour
         while(true){
             currentTime += 1.0f*updateRate*timeScale;
             UpdateTime();
-            Vector2 sunPosition = AstroCalsulator.CalculateSunPosition(longitude,latitude,GMT,day,month,year,seconds,minutes,hours);
+            Vector2 sunPosition = AstroCalsulator.CalculateSunPosition(longitude,latitude,GMT,new System.DateTime(year, month, day, hours, minutes, seconds));
             sun.transform.eulerAngles = new Vector3(sunPosition.x,sunPosition.y,0);
             moon.transform.eulerAngles = new Vector3(-sunPosition.x, -(180.0f-sunPosition.y), 0);
             yield return new WaitForSeconds(updateRate);
@@ -75,7 +74,7 @@ public class DayNightController : MonoBehaviour
     }
 
     private void OnValidate(){
-        Vector2 sunPosition = AstroCalsulator.CalculateSunPosition(longitude,latitude,GMT,day,month,year,seconds,minutes,hours);
+        Vector2 sunPosition = AstroCalsulator.CalculateSunPosition(longitude,latitude,GMT,new System.DateTime(year, month, day, hours, minutes, seconds));
         sun.transform.eulerAngles = new Vector3(sunPosition.x,sunPosition.y,0);
         moon.transform.eulerAngles = new Vector3(-sunPosition.x, -(180.0f-sunPosition.y), 0);
     }
