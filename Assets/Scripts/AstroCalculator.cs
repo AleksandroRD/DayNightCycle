@@ -4,20 +4,16 @@ using static System.Math;
 
 public static class AstroCalsulator
 {   
-    //helper functions
     static double degToRad = PI/180.0f;
     static double radToDeg = 180.0f/PI;
-    //Local Standard Time Meridian
     static double CalculateLSTM(double GMT){return GMT*15;}
 
     static int GetDaysPassedSinceStartOfYear(int day,int month,int year)
     {
         DateTime currentDate = new(year, month, day);
      
-        // Get the first day of the current year
         DateTime startOfYear = new(currentDate.Year, 1, 1);
 
-        // Calculate the difference in days
         int daysPassed = (int)(currentDate - startOfYear).TotalDays;
         return daysPassed + 1;
     }

@@ -2,33 +2,25 @@ Shader "Custom/Skybox"
 {
     Properties
     {
-        [Header(SkyColors)]
-        [NoScaleOffset] _SunZenithGrad ("Sun-Zenith gradient", 2D) = "white" {}
-        [NoScaleOffset] _ViewZenithGrad ("View-Zenith gradient", 2D) = "white" {}
-        [NoScaleOffset] _SunViewGrad ("Sun-View gradient", 2D) = "white" {}
-
-        [Header(GroundHaloSettings)]
+        [Header(Ground Halo Settings)]
         _GroundHaloDistance ("Ground Halo Distanse", Float) = 4.0
 
-        [Header(SunSettings)]
+        [Header(Sun Settings)]
         _SunRadius ("Sun Radius", Range(0,1)) = 0.05
-        
         _SunColor ("Sun Color", Color) = (.25, .5, .5, 1)
         _SunHaloRadius ("Sun Halo Radius", Float) = 4.0
         _TransitionSmoothness("Transition Smoothness",Float) = 1.5
 
-        [Header(MoonSettings)]
+        [Header(Moon Settings)]
         _MoonExposure ("Moon exposure", Range(-16, 16)) = 0
         _MoonRadius ("Moon Radius", Range(0,1)) = 0.05
         [NoScaleOffset] _MoonCubeMap ("Moon cube map", Cube) = "black" {}
 
-        [Header(StarSettings)]
+        [Header(Star Settings)]
         [NoScaleOffset] _StarCubeMap ("Star cube map", Cube) = "black" {}
         _StarExposure ("Star exposure", Range(-16, 16)) = 0
         _StarPower ("Star power", Range(1,5)) = 1
-
         _StarLatitude ("Star latitude", Range(-90, 90)) = 0
-        _StarSpeed ("Star speed", Float) = 0.001
         
     }
     SubShader
@@ -132,6 +124,7 @@ Shader "Custom/Skybox"
             
                return mul(fullRotation,  viewDir);
             }
+
             float sphIntersect(float3 rayDir, float3 spherePos, float radius)
             {
                 float3 oc = -spherePos;
@@ -170,7 +163,7 @@ Shader "Custom/Skybox"
                 // sun
                 float sunMask = GetSunMask(sunViewDot, _SunRadius);
                 float3 sunColor = _SunColor.rgb * sunMask;
-                
+
                 //moon
                 float moonIntersect = sphIntersect(viewDir, _MoonDir, _MoonRadius);
                 float moonMask = moonIntersect > -1 ? 1 : 0;
