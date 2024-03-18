@@ -2,25 +2,33 @@ Shader "Custom/Skybox"
 {
     Properties
     {
+        [Header(SkyColors)]
         [NoScaleOffset] _SunZenithGrad ("Sun-Zenith gradient", 2D) = "white" {}
         [NoScaleOffset] _ViewZenithGrad ("View-Zenith gradient", 2D) = "white" {}
         [NoScaleOffset] _SunViewGrad ("Sun-View gradient", 2D) = "white" {}
 
-        _SunRadius ("Sun Radius", Range(0,1)) = 0.05
-        
-        _MainLightColor ("Sun Color", Color) = (.25, .5, .5, 1)
-        _SunHaloRadius ("Sun Halo Radius", Float) = 4.0
+        [Header(GroundHaloSettings)]
         _GroundHaloDistance ("Ground Halo Distanse", Float) = 4.0
 
+        [Header(SunSettings)]
+        _SunRadius ("Sun Radius", Range(0,1)) = 0.05
+        
+        _SunColor ("Sun Color", Color) = (.25, .5, .5, 1)
+        _SunHaloRadius ("Sun Halo Radius", Float) = 4.0
         _TransitionSmoothness("Transition Smoothness",Float) = 1.5
 
+        [Header(MoonSettings)]
         _MoonExposure ("Moon exposure", Range(-16, 16)) = 0
         _MoonRadius ("Moon Radius", Range(0,1)) = 0.05
-
         [NoScaleOffset] _MoonCubeMap ("Moon cube map", Cube) = "black" {}
+
+        [Header(StarSettings)]
         [NoScaleOffset] _StarCubeMap ("Star cube map", Cube) = "black" {}
         _StarExposure ("Star exposure", Range(-16, 16)) = 0
         _StarPower ("Star power", Range(1,5)) = 1
+
+        _StarLatitude ("Star latitude", Range(-90, 90)) = 0
+        _StarSpeed ("Star speed", Float) = 0.001
         
     }
     SubShader
@@ -60,18 +68,36 @@ Shader "Custom/Skybox"
             }
 
             float3 _SunDir, _MoonDir;
-            float _SunRadius, _MoonRadius;
-            float _SunHaloRadius,_GroundHaloDistance;
-            float _TransitionSmoothness;
+            float _SunRadius,_SunHaloRadius,_TransitionSmoothness;
+            float _GroundHaloDistance;
             float4x4 _MoonSpaceMatrix;
-            float _MoonExposure, _StarExposure;
-            float _StarPower;
+            float _MoonExposure, _StarExposure, _MoonRadius;
+            float _StarPower, _StarLatitude, _StarSpeed;
+            float4 _SunColor;
 
             TEXTURE2D(_SunZenithGrad);      SAMPLER(sampler_SunZenithGrad);
             TEXTURE2D(_ViewZenithGrad);     SAMPLER(sampler_ViewZenithGrad);
             TEXTURE2D(_SunViewGrad);        SAMPLER(sampler_SunViewGrad);
             TEXTURECUBE(_MoonCubeMap);      SAMPLER(sampler_MoonCubeMap);
             TEXTURECUBE(_StarCubeMap);      SAMPLER(sampler_StarCubeMap);
+            
+            // From: https://gist.github.com/keijiro/ee439d5e7388f3aafc5296005c8c3f33
+            float3x3 AngleAxis3x3(float angle, float3 axis)
+            {
+                float c, s;
+                sincos(angle, s, c);
+            
+                float t = 1 - c;
+                float x = axis.x;
+                float y = axis.y;
+                float z = axis.z;
+            
+                return float3x3(
+                    t * x * x + c, t * x * y - s * z, t * x * z + s * y,
+                    t * x * y + s * z, t * y * y + c, t * y * z - s * x,
+                    t * x * z - s * y, t * y * z + s * x, t * z * z + c
+                    );
+            }
 
             float GetSunMask(float sunViewDot, float sunRadius)
             {
@@ -91,6 +117,21 @@ Shader "Custom/Skybox"
                 return SAMPLE_TEXTURECUBE(_MoonCubeMap, sampler_MoonCubeMap, uvw).rgb;
             }
 
+            float3 GetStarUVW(float3 viewDir, float latitude, float localSiderealTime)
+            {
+               // tilt = 0 at the north pole, where latitude = 90 degrees
+               float tilt = PI * (latitude - 90) / 180;
+               float3x3 tiltRotation = AngleAxis3x3(tilt, float3(1,0,0));
+            
+               // 0.75 is a texture offset for lST = 0 equals noon
+               float spin = (0.75-localSiderealTime) * 2 * PI;
+               float3x3 spinRotation = AngleAxis3x3(spin, float3(0, 1, 0));
+            
+               // The order of rotation is important
+               float3x3 fullRotation = mul(spinRotation, tiltRotation);
+            
+               return mul(fullRotation,  viewDir);
+            }
             float sphIntersect(float3 rayDir, float3 spherePos, float radius)
             {
                 float3 oc = -spherePos;
@@ -128,7 +169,7 @@ Shader "Custom/Skybox"
                 
                 // sun
                 float sunMask = GetSunMask(sunViewDot, _SunRadius);
-                float3 sunColor = _MainLightColor.rgb * sunMask;
+                float3 sunColor = _SunColor.rgb * sunMask;
                 
                 //moon
                 float moonIntersect = sphIntersect(viewDir, _MoonDir, _MoonRadius);
@@ -142,13 +183,13 @@ Shader "Custom/Skybox"
                 float3 moonColor = moonMask * moonNdotL * exp2(_MoonExposure) * moonTexture;
 
                 // The stars
-                float3 starUVW = viewDir;
+                float3 starUVW = GetStarUVW(viewDir, _StarLatitude, _Time.y * _StarSpeed % 1);
                 float3 starColor = SAMPLE_TEXTURECUBE_BIAS(_StarCubeMap, sampler_StarCubeMap, starUVW, -1).rgb;
                 float starStrength = (1 - sunViewDot01) * (saturate(-sunZenithDot));
                 starColor = pow(abs(starColor), _StarPower);
                 starColor *= (1 - sunMask) * (1 - moonMask) * exp2(_StarExposure) * starStrength;
                 
-                float3 col = skyColor + sunColor + moonColor + starColor;
+                float3 col = sunColor + skyColor + moonColor + starColor;
                 return float4(col, 1);
             }
             ENDHLSL

@@ -88,7 +88,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _GroundHaloDistance: 0
+    - _GroundHaloDistance: -0.15
     - _Metallic: 0
     - _Mode: 0
     - _MoonExposure: 0
@@ -99,8 +99,10 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StarExposure: 1
+    - _StarLatitude: 0
     - _StarPower: 1
-    - _SunHaloRadius: 0
+    - _StarSpeed: 0.001
+    - _SunHaloRadius: -1.5
     - _SunRadius: 0.062
     - _TransitionSmoothness: 4
     - _UVSec: 0
@@ -108,5 +110,6 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _MainLightColor: {r: 1, g: 1, b: 0, a: 1}
+    - _MainLightColor: {r: 1, g: 0.748679, b: 0, a: 1}
+    - _SunColor: {r: 1, g: 0.6234108, b: 0.043396115, a: 1}
   m_BuildTextureStacks: []

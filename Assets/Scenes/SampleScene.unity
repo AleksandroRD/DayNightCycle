@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.7582124, g: 1.2383754, b: 1.6301482, a: 1}
+  m_IndirectSpecularColor: {r: 0.08107913, g: 0.0648324, b: 0.055684887, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -165,9 +165,9 @@ MonoBehaviour:
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 21819
-    ctime1: 30146
-    ctime2: 42328
+    ctime0: 28758
+    ctime1: 35389
+    ctime2: 41287
     ctime3: 0
     ctime4: 0
     ctime5: 0
@@ -195,8 +195,8 @@ MonoBehaviour:
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 26445
-    ctime1: 36623
+    ctime0: 32768
+    ctime1: 37702
     ctime2: 0
     ctime3: 0
     ctime4: 0
@@ -225,9 +225,9 @@ MonoBehaviour:
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 22745
-    ctime1: 32305
-    ctime2: 46029
+    ctime0: 28180
+    ctime1: 34078
+    ctime2: 43562
     ctime3: 47879
     ctime4: 0
     ctime5: 0
@@ -248,7 +248,7 @@ MonoBehaviour:
   sunViewGradientTexture: {fileID: 2800000, guid: 2f07ba4a7f127994290e1c742be0d788, type: 3}
   sunZenithGradientTexture: {fileID: 2800000, guid: 84da3c0f7c9d26a40b8243ce3b7f4ec5, type: 3}
   viewZenithGradientTexture: {fileID: 2800000, guid: 1f28fa4b4aef73949ae238138f66d232, type: 3}
-  autoUpdate: 0
+  autoUpdate: 1
 --- !u!114 &105867035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,18 +263,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 705507994}
   moon: {fileID: 130938618}
-  seconds: 1
-  minutes: 1
-  hours: 12
+  seconds: 0
+  minutes: 59
+  hours: 23
   day: 1
-  month: 8
+  month: 4
   year: 2023
   latitude: 50
   longitude: 30
   GMT: 0
-  timeScale: 0
+  dayLenght: 3600
   updateRate: 0.1
-  dayNightCycle: 0
+  dayNightCycle: 1
 --- !u!4 &105867036
 Transform:
   m_ObjectHideFlags: 0
@@ -377,7 +377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130938617}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.3927469, y: 0.35365924, z: 0.16687253, w: 0.83236325}
+  m_LocalRotation: {x: 0.076633, y: 0.9229829, z: -0.25245637, w: 0.28017098}
   m_LocalPosition: {x: -2.9904518, y: 6.6443825, z: 0.4413967}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -471,7 +471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1668725, y: 0.8323633, z: -0.39274693, w: -0.35365915}
+  m_LocalRotation: {x: 0.25245637, y: 0.28017104, z: 0.076633014, w: -0.9229829}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -564,7 +564,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 3.13, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -668,6 +668,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
-  - {fileID: 105867036}
   - {fileID: 130938619}
+  - {fileID: 105867036}
   - {fileID: 1468298208}
