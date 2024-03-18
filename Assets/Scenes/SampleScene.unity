@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.21129465, g: 0.27777568, b: 0.40275732, a: 1}
+  m_IndirectSpecularColor: {r: 0.7582124, g: 1.2383754, b: 1.6301482, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -265,7 +265,7 @@ MonoBehaviour:
   moon: {fileID: 130938618}
   seconds: 1
   minutes: 1
-  hours: 23
+  hours: 12
   day: 1
   month: 8
   year: 2023
@@ -377,7 +377,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130938617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.02224801, y: 0.97589374, z: -0.18093376, w: 0.11999802}
+  m_LocalRotation: {x: -0.3927469, y: 0.35365924, z: 0.16687253, w: 0.83236325}
   m_LocalPosition: {x: -2.9904518, y: 6.6443825, z: 0.4413967}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -471,7 +471,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.18093376, y: 0.119997986, z: 0.022248002, w: -0.97589374}
+  m_LocalRotation: {x: -0.1668725, y: 0.8323633, z: -0.39274693, w: -0.35365915}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

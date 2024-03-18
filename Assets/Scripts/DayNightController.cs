@@ -10,22 +10,22 @@ public class DayNightController : MonoBehaviour
     [Header("Time")]
     [SerializeField]
     [Range(0,59)]
-    private int seconds;
+    private int seconds = 0;
     [SerializeField]
     [Range(0,59)]
-    private int minutes;
+    private int minutes = 0;
     [Range(0,23)]
     [SerializeField]
-    private int hours;
+    private int hours = 0;
     [Header("Date")]
     [SerializeField]
-    [Range(1,31)]
-    private int day;
+    [Range(1,30)]
+    private int day = 1;
     [SerializeField]
     [Range(1,12)]
-    private int month;
+    private int month = 1;
     [SerializeField]
-    private int year;
+    private int year = 2000;
     [SerializeField]
     [Header("Position")]
     private float latitude = 50;
@@ -34,10 +34,10 @@ public class DayNightController : MonoBehaviour
     [SerializeField]
     [Range(-12,12)]
     private int GMT = 0;
-    [SerializeField]
-    [Range(1f,1410f)]
+
     [Header("Day Night Cycle")]
-    private float timeScale;
+    [SerializeField]
+    private float dayLenght;
     [SerializeField]
     [Range(0.01f,5f)]
     private float updateRate = 0.1f;
@@ -45,6 +45,7 @@ public class DayNightController : MonoBehaviour
     private bool dayNightCycle = false;
     public float currentTime{get; private set;}
 
+    public readonly int realDayLenght = 84600;
     void Start(){
         
         currentTime = seconds + minutes * 60 + hours * 3600;
@@ -55,7 +56,7 @@ public class DayNightController : MonoBehaviour
 
     IEnumerator RunTime(){
         while(true){
-            currentTime += 1.0f*updateRate*timeScale;
+            currentTime += realDayLenght / dayLenght * updateRate;
             UpdateTime();
             Vector2 sunPosition = AstroCalsulator.CalculateSunPosition(longitude,latitude,GMT,new System.DateTime(year, month, day, hours, minutes, seconds));
             sun.transform.eulerAngles = new Vector3(sunPosition.x,sunPosition.y,0);
@@ -66,7 +67,7 @@ public class DayNightController : MonoBehaviour
 
     private void UpdateTime(){
         hours = (int)(currentTime / 3600);
-        minutes = (int)(currentTime % 3600);
+        minutes = (int)(currentTime % 3600 / 60);
         seconds = (int)currentTime % 3600 - minutes * 60;
         if(currentTime > 84600.0){
             currentTime = 0;
