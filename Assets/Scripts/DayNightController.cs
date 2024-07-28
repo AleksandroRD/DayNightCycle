@@ -21,7 +21,7 @@ public class DayNightController : MonoBehaviour
     [Header("Position")]
     [SerializeField] private float latitude = 50;
     [SerializeField] private float longitude = 30;
-    [SerializeField][Range(-12, 12)] private int GMT = 0;
+    [SerializeField][Range(-12, 12)] private int UTC = 0;
 
     [Header("Day Night Cycle")]
     public float dayLenght;
@@ -67,15 +67,20 @@ public class DayNightController : MonoBehaviour
 
     private void UpdateSunMoonPosition()
     {
-        var sunPosition = AstroCalsulator.CalculateSunPosition(longitude, latitude, GMT, new DateTime(year, month, day, hours, minutes, seconds));
+        var sunPosition = AstroCalsulator.CalculateSunPosition(longitude, latitude, UTC, new DateTime(year, month, day, hours, minutes, seconds));
         sun.transform.eulerAngles = new Vector3((float)sunPosition.Azimuth, (float)sunPosition.Elevation, 0);
 
-        moon.transform.eulerAngles = new Vector3((float)-sunPosition.Azimuth, -(180.0f - (float)sunPosition.Elevation), 0);
+        var moonPosition = AstroCalsulator.CalculateMoonPosition(new DateTime(year, month, day, hours - UTC, minutes, seconds), longitude, latitude);
+        moon.transform.eulerAngles = new Vector3((float)moonPosition.Azimuth, (float)moonPosition.Elevation, 0);
     }
 
     public void SetCurrentRealTime()
     {
         DateTime now = DateTime.Now;
+        year = now.Year;
+        day = now.Day;
+        month = now.Month;
+
         currentTime = now.Second + now.Minute * 60 + now.Hour * 3600;
 
         UpdateTime();
