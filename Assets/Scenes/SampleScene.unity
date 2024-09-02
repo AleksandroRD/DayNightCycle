@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.34175614, g: 0.39499396, b: 0.5197628, a: 1}
+  m_IndirectSpecularColor: {r: 0.37259382, g: 0.41853234, b: 0.5364288, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -156,97 +156,6 @@ MonoBehaviour:
   _Sun: {fileID: 705507995}
   _Moon: {fileID: 130938619}
   dayNightController: {fileID: 105867035}
-  sunViewGradient:
-    serializedVersion: 2
-    key0: {r: 0, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.94486856, b: 0, a: 1}
-    key2: {r: 0.16793872, g: 0.55380356, b: 0.86415094, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 28758
-    ctime1: 35389
-    ctime2: 41287
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  sunZenithGradient:
-    serializedVersion: 2
-    key0: {r: 0.04905659, g: 0.047297955, b: 0.047297955, a: 1}
-    key1: {r: 0.13023138, g: 0.5259296, b: 0.7584905, a: 1}
-    key2: {r: 0, g: 0, b: 0, a: 0}
-    key3: {r: 0, g: 0, b: 0, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 32768
-    ctime1: 37702
-    ctime2: 0
-    ctime3: 0
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: 0
-    m_NumColorKeys: 2
-    m_NumAlphaKeys: 2
-  viewZenithGradient:
-    serializedVersion: 2
-    key0: {r: 0, g: 0, b: 0, a: 1}
-    key1: {r: 0.97735846, g: 0.51785797, b: 0, a: 1}
-    key2: {r: 0.3137255, g: 0.6708654, b: 0.7882353, a: 0}
-    key3: {r: 0.31398356, g: 0.78867924, b: 0.5848859, a: 0}
-    key4: {r: 0, g: 0, b: 0, a: 0}
-    key5: {r: 0, g: 0, b: 0, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 28180
-    ctime1: 34078
-    ctime2: 43562
-    ctime3: 47879
-    ctime4: 0
-    ctime5: 0
-    ctime6: 0
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 0
-    m_ColorSpace: 0
-    m_NumColorKeys: 3
-    m_NumAlphaKeys: 2
-  autoUpdate: 1
 --- !u!114 &105867035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,11 +170,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 705507994}
   moon: {fileID: 130938618}
-  seconds: 0
-  minutes: 0
-  hours: 15
-  day: 28
-  month: 7
+  seconds: 4
+  minutes: 12
+  hours: 11
+  day: 30
+  month: 8
   year: 2024
   latitude: 54.31
   longitude: 13.085
@@ -375,7 +284,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130938617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.48674288, y: 0.007359403, z: 0.004100879, w: -0.8735047}
+  m_LocalRotation: {x: 0.118228965, y: 0.49466825, z: -0.06813932, w: 0.858302}
   m_LocalPosition: {x: -2.9904518, y: 6.6443825, z: 0.4413967}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -469,13 +378,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.1423505, y: 0.85470045, z: -0.3892836, w: -0.31254086}
+  m_LocalRotation: {x: 0.10565388, y: 0.89432156, z: -0.3109143, w: 0.30390543}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 85.122, y: -133.999, z: 21.638}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,7 +577,7 @@ Transform:
   m_GameObject: {fileID: 1913736610}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -13.0999, y: 0.4744749, z: -0.20313168}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
