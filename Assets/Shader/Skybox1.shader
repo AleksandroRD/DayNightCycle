@@ -91,12 +91,6 @@ Shader "Custom/Skybox1"
             //Quality options
             int _NumScatteringSamples = 16;
             int _NumLightSamples = 8;
-            
-            float3 GetSkyViewDirWS(float2 positionCS)
-            {
-                float4 viewDirWS = mul(float4(positionCS.xy, 1.0f, 1.0f), _PixelCoordToViewDirWS);
-                return normalize(viewDirWS.xyz);
-            }
 
             float ComputePhaseRayleigh(float mu)
             {
@@ -220,7 +214,7 @@ Shader "Custom/Skybox1"
             
                 float3 color = ComputeIncidentLight(observerPosition, direction, _SunIntensity, 0, INF);
 
-                return float4(IN.viewDirection,1);
+                return float4(color,1);
             }
             
             ENDHLSL
