@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class DayNightController : MonoBehaviour
 {
-    [SerializeField] private Light sun;
-    [SerializeField] private Light moon;
+    [SerializeField] public Light sun;
+    [SerializeField] public Light moon;
 
     [Header("Time")]
-    [SerializeField][Range(0, 59)] private int seconds = 0;
-    [SerializeField][Range(0, 59)] private int minutes = 0;
+    [SerializeField][Range(0, 59)] private int second = 0;
+    [SerializeField][Range(0, 59)] private int minute = 0;
 
-    [SerializeField][Range(0, 23)] private int hours = 0;
+    [SerializeField][Range(0, 23)] private int hour = 0;
 
     [Header("Date")]
     [SerializeField][Range(1, 30)] private int day = 1;
@@ -28,22 +28,20 @@ public class DayNightController : MonoBehaviour
     [SerializeField][Range(0.01f, 5f)] private float updateRate = 0.1f;
     [SerializeField] private bool dayNightCycle = false;
     public float currentTime { get; private set; }
-    public readonly int realDayLenght = 84600;
+    public const int REAL_DAY_LENGHT = 84600;
+
     void Start()
     {
-        currentTime = seconds + minutes * 60 + hours * 3600;
+        currentTime = second + minute * 60 + hour * 3600;
 
-        if (dayNightCycle)
-        {
-            StartCoroutine(RunTime());
-        }
+        if (dayNightCycle) { StartCoroutine(RunTime()); }
     }
 
     IEnumerator RunTime()
     {
         while (true)
         {
-            currentTime += realDayLenght / dayLenght * updateRate;
+            currentTime += REAL_DAY_LENGHT / dayLenght * updateRate;
 
             UpdateTime();
 
@@ -55,22 +53,19 @@ public class DayNightController : MonoBehaviour
 
     private void UpdateTime()
     {
-        hours = (int)(currentTime / 3600);
-        minutes = (int)(currentTime % 3600 / 60);
-        seconds = (int)currentTime % 3600 - minutes * 60;
+        if (currentTime > 84600.0) { currentTime = 0; }
 
-        if (currentTime > 84600.0)
-        {
-            currentTime = 0;
-        }
+        hour = (int)(currentTime / 3600);
+        minute = (int)(currentTime % 3600 / 60);
+        second = (int)(currentTime % 3600 - minute * 60);
     }
 
     private void UpdateSunMoonPosition()
     {
-        var sunPosition = AstroCalsulator.CalculateSunPosition(longitude, latitude, UTC, new DateTime(year, month, day, hours, minutes, seconds));
+        var sunPosition = AstroCalsulator.CalculateSunPosition(new DateTime(year, month, day, hour, minute, second), UTC, longitude, latitude);
         sun.transform.eulerAngles = new Vector3((float)sunPosition.Azimuth, (float)sunPosition.Elevation, 0);
 
-        var moonPosition = AstroCalsulator.CalculateMoonPosition(new DateTime(year, month, day, hours - UTC, minutes, seconds), longitude, latitude);
+        var moonPosition = AstroCalsulator.CalculateMoonPosition(new DateTime(year, month, day, hour - UTC, minute, second), longitude, latitude);
         moon.transform.eulerAngles = new Vector3((float)moonPosition.Azimuth, (float)moonPosition.Elevation, 0);
     }
 

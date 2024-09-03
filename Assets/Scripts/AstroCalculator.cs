@@ -23,7 +23,7 @@ public static class AstroCalsulator
         return daysPassed + 1;
     }
 
-    public static (double Azimuth, double Elevation) CalculateSunPosition(double longitude, double latitude, int UTC, DateTime dateTime)
+    public static (double Azimuth, double Elevation) CalculateSunPosition(DateTime dateTime, int UTC, double longitude, double latitude)
     {
         double daysPassed = GetDaysPassedSinceStartOfYear(dateTime.Day, dateTime.Month, dateTime.Year);
         double b = 0.9863013698630137f * (daysPassed - 81);
@@ -61,9 +61,7 @@ public static class AstroCalsulator
     public static (double Azimuth, double Elevation) CalculateMoonPosition(DateTime date, double longitude, double latitude)
     {
         double JD = JulianDay(date);
-        //double JD = JulianDay(new DateTime(1991, 5, 19, 13, 0, 0));
-        //longitude = 10;
-        //latitude = 50; 
+
         double T = (JD - JULIAN_EPOCH) / JULIAN_CENTURY;
 
         //MOON MEAN LONGITUDE
