@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: ed3fef74bd78c2e4181878c79466403a, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: a99a949157681a14aa2981ac1ef0d7a8, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,6 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.37259382, g: 0.41853234, b: 0.5364288, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -170,15 +169,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sun: {fileID: 705507994}
   moon: {fileID: 130938618}
-  seconds: 4
-  minutes: 12
-  hours: 11
-  day: 30
-  month: 8
-  year: 2024
-  latitude: 54.31
-  longitude: 13.085
-  UTC: 2
+  second: 39
+  minute: 46
+  hour: 13
+  day: 12
+  month: 5
+  year: 2025
+  latitude: 50
+  longitude: 10
+  UTC: 0
   dayLenght: 60
   updateRate: 0.1
   dayNightCycle: 1
@@ -284,8 +283,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130938617}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.118228965, y: 0.49466825, z: -0.06813932, w: 0.858302}
-  m_LocalPosition: {x: -2.9904518, y: 6.6443825, z: 0.4413967}
+  m_LocalRotation: {x: 0.20884007, y: 0.41178972, z: -0.097542726, w: 0.88164645}
+  m_LocalPosition: {x: -2.9904518, y: -1.26, z: 0.4413967}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -378,13 +377,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705507993}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.10565388, y: 0.89432156, z: -0.3109143, w: 0.30390543}
+  m_LocalRotation: {x: -0.056831613, y: 0.86981106, z: -0.47911787, w: -0.103174545}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 85.122, y: -133.999, z: 21.638}
+  m_LocalEulerAnglesHint: {x: 74, y: 13, z: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,7 +494,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &1913736611
 MeshCollider:
   m_ObjectHideFlags: 0

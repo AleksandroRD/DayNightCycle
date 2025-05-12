@@ -62,11 +62,9 @@ public class DayNightController : MonoBehaviour
 
     private void UpdateSunMoonPosition()
     {
-        var sunPosition = AstroCalsulator.CalculateSunPosition(new DateTime(year, month, day, hour, minute, second), UTC, longitude, latitude);
-        sun.transform.eulerAngles = new Vector3((float)sunPosition.Azimuth, (float)sunPosition.Elevation, 0);
-
-        var moonPosition = AstroCalsulator.CalculateMoonPosition(new DateTime(year, month, day, hour - UTC, minute, second), longitude, latitude);
-        moon.transform.eulerAngles = new Vector3((float)moonPosition.Azimuth, (float)moonPosition.Elevation, 0);
+        DateTime localTime = new DateTime(year, month, day, hour, minute, second);       
+        var sunPosition = AstroCalsulator.CalculateSunPosition(localTime, longitude, latitude);
+        sun.transform.eulerAngles = new Vector3((float)sunPosition.Elevation, (float)sunPosition.Azimuth, 0);
     }
 
     public void SetCurrentRealTime()
