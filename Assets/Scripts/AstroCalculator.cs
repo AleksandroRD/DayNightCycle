@@ -53,16 +53,12 @@ public static class AstroCalsulator
         double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T,2) - Pow(T,3) / 38710000.0;
 
         //Local Hour angle [Meeus] Page 88. Formula Derivated from local hour angle formula
-        double LHA = ST + longitude - RA; 
-
-        Debug.ClearDeveloperConsole();
+        double LHA = ST + longitude - RA;
 
         //[Meeus] 12.5
         double elevation = Asin(Sin(delta * DEG_TO_RAD) * Sin(latitude * DEG_TO_RAD) + Cos(delta * DEG_TO_RAD) * Cos(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG;
-        Debug.Log("Elevation: " + elevation);
         //[Meeus] 12.6
         double azimuth = Clamp360(Atan2(-Sin(LHA * DEG_TO_RAD), Cos(latitude * DEG_TO_RAD) * Tan(delta * DEG_TO_RAD) - Sin(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG);
-        Debug.Log("Azimuth: " + azimuth);
         //[Meeus] Page 152. Value is converted from astronomical units to km by myltiplying by 149597870.7
         double distance = 1.000001018 * (1 - Pow(e, 2)) / (1 + e * Cos(v * DEG_TO_RAD)) * 149597870.7;
         
@@ -77,19 +73,19 @@ public static class AstroCalsulator
         double T = (JD - JULIAN_EPOCH) / JULIAN_CENTURY;
 
         //MOON MEAN LONGITUDE [Meeus] 45.1
-        double L = Clamp360(218.3164591 + 481267.88134236 * T - 0.0013268 * Pow(T, 2) + Pow(T, 3) / 538841 - Pow(T, 4) / 65194000);
+        double L = Clamp360(218.3164591 + 481267.88134236 * T - 0.0013268 * Pow(T, 2) + Pow(T, 3) / 538841 - Pow(T, 4) / 65194000.0);
 
         //MOON MEAN ELONGATION [Meeus] 45.2
-        double D = Clamp360(297.8502042 + 445267.1115168 * T - 0.0016300 * Pow(T, 2) + Pow(T, 3) / 545868 - Pow(T, 4) / 113065000);
+        double D = Clamp360(297.8502042 + 445267.1115168 * T - 0.0016300 * Pow(T, 2) + Pow(T, 3) / 545868 - Pow(T, 4) / 113065000.0);
 
         //SUN MEAN ANOMALY [Meeus] 45.3
-        double M = Clamp360(357.5291092 + 35999.0502909 * T - 0.0001536 * Pow(T, 2) + Pow(T, 3) / 24490000);
+        double M = Clamp360(357.5291092 + 35999.0502909 * T - 0.0001536 * Pow(T, 2) + Pow(T, 3) / 24490000.0);
 
         //MOON MEAN ANOMALY [Meeus] 45.4
-        double MA = Clamp360(134.9634114 + 477198.8676313 * T + 0.0089970 * Pow(T, 2) + Pow(T, 3) / 69699 - Pow(T, 4) / 14712000);
+        double MA = Clamp360(134.9634114 + 477198.8676313 * T + 0.0089970 * Pow(T, 2) + Pow(T, 3) / 69699.0 - Pow(T, 4) / 14712000.0);
 
         //MOON ARGUMENT OF LATITUDE [Meeus] 45.5
-        double F = Clamp360(93.2720993 + 483202.0175273 * T - 0.0034029 * Pow(T, 2) - Pow(T, 3) / 3526000 + Pow(T, 4) / 863310000);
+        double F = Clamp360(93.2720993 + 483202.0175273 * T - 0.0034029 * Pow(T, 2) - Pow(T, 3) / 3526000.0 + Pow(T, 4) / 863310000.0);
 
         //Calculate "A1" (due to the action of Venus) [Meeus] Page 308
         double A1 = Clamp360(119.75 + (131.849 * T));
@@ -126,8 +122,8 @@ public static class AstroCalsulator
             }
             
             double sumLAddition = termD + termMSun + termMMoon + termF;
-            sumLAddition = terms[4] * Sin(DEG_TO_RAD * sumLAddition);
-            double sumRAddition = terms[5] * Cos(DEG_TO_RAD * sumLAddition);
+            double sumRAddition = terms[5] * Cos(sumLAddition * DEG_TO_RAD);
+            sumLAddition = terms[4] * Sin(sumLAddition * DEG_TO_RAD);
 
             terms = sumBArray.GetRow(i);
 
@@ -145,7 +141,7 @@ public static class AstroCalsulator
 
             //Add up the four fundamental arguments D, M, M' and F.
             double sumBAddition = termD + termMSun + termMMoon + termF;
-            sumBAddition = terms[4] * Sin(DEG_TO_RAD * sumBAddition);
+            sumBAddition = terms[4] * Sin(sumBAddition * DEG_TO_RAD);
 
             sumL += sumLAddition;
             sumB += sumBAddition;
@@ -153,41 +149,41 @@ public static class AstroCalsulator
         }
 
         //Additives to ∑l [Meeus] Page 312
-        sumL += 3958.0 * Sin(DEG_TO_RAD * A1);
-        sumL += 1962.0 * Sin(DEG_TO_RAD * (L - F));
-        sumL += 318.0 * Sin(DEG_TO_RAD * A2);
+        sumL += 3958.0 * Sin(A1 * DEG_TO_RAD);
+        sumL += 1962.0 * Sin((L - F) * DEG_TO_RAD);
+        sumL += 318.0 * Sin(A2 * DEG_TO_RAD);
 
         //Additives to ∑b [Meeus] Page 312
-        sumB -= 2235.0 * Sin(DEG_TO_RAD * L);
-        sumB += 382.0 * Sin(DEG_TO_RAD * A3);
-        sumB += 175.0 * Sin(DEG_TO_RAD * (A1 - F));
-        sumB += 175.0 * Sin(DEG_TO_RAD * (A1 + F));
-        sumB += 127.0 * Sin(DEG_TO_RAD * (L - MA));
-        sumB -= 115.0 * Sin(DEG_TO_RAD * (L + MA));
+        sumB -= 2235.0 * Sin(L * DEG_TO_RAD);
+        sumB += 382.0 * Sin(A3 * DEG_TO_RAD);
+        sumB += 175.0 * Sin((A1 - F) * DEG_TO_RAD);
+        sumB += 175.0 * Sin((A1 + F) * DEG_TO_RAD);
+        sumB += 127.0 * Sin((L - MA) * DEG_TO_RAD);
+        sumB -= 115.0 * Sin((L + MA) * DEG_TO_RAD);
 
         //Geocentric Longitude Moon [Meeus] Page 312
-        double lamdba = L + sumL / 1000000.0 - 1.127527;
+        double lambda = L + sumL / 1000000.0;
 
         //Geocentric Latitude Moon [Meeus] Page 312
         double beta = sumB / 1000000.0;
 
         //Distance to the moon [Meeus] Page 312
-        double distance = 385000.56 - sumR / 1000.0;
+        double distance = 385000.56 + sumR / 1000.0;
 
         //Moon paralax [Meeus] Page 308
-        double p = Asin(6378.14 / distance);
+        double paralax = Asin(6378.14 / distance) * RAD_TO_DEG;
+        Debug.Log("paralax: " + paralax);
+        //Obliquity of ecliptic [Meeus] 21.2
+        double epsilon = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * T * T - 0.001813 * T * T * T) / 3600;
 
         //[Meeus] Page 9. This block is derevived from the formula on the page
-        double eps = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * T * T - 0.001813 * T * T * T) / 3600;
-        double X = Cos(beta * DEG_TO_RAD) * Cos(lamdba * DEG_TO_RAD);
-        double Y = Cos(eps * DEG_TO_RAD) * Cos(beta * DEG_TO_RAD) * Sin(lamdba * DEG_TO_RAD) - Sin(eps * DEG_TO_RAD) * Sin(beta * DEG_TO_RAD);
-        double Z = Sin(eps * DEG_TO_RAD) * Cos(beta * DEG_TO_RAD) * Sin(lamdba * DEG_TO_RAD) + Cos(eps * DEG_TO_RAD) * Sin(beta * DEG_TO_RAD);
-        double R = Sqrt(1.0 - Z * Z);
-        double delta = RAD_TO_DEG * Atan(Z / R);
-        double RAH = 24.0 / PI * Atan(Y / (X + R)); 
-
-        //[Meeus] Page 8. one hour corresponds to 15 degrees.
-        double RA = RAH * 15.0;
+    
+        double delta = Asin(Sin(epsilon * DEG_TO_RAD) * Cos(beta * DEG_TO_RAD) * Sin(lambda * DEG_TO_RAD) + Cos(epsilon * DEG_TO_RAD) * Sin(beta * DEG_TO_RAD)) * RAD_TO_DEG;
+        
+        double y = Sin(lambda * DEG_TO_RAD) * Cos(epsilon * DEG_TO_RAD) - Tan(beta * DEG_TO_RAD) * Sin(epsilon * DEG_TO_RAD);
+        double x = Cos(lambda * DEG_TO_RAD);
+        
+        double RA = Atan2(y, x) * RAD_TO_DEG;
 
         //sidereal time at Greenwich [Meeus] 11.4
         double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T,2) - Pow(T,3) / 38710000.0;
@@ -196,11 +192,11 @@ public static class AstroCalsulator
         double LHA = ST + longitude - RA; 
 
         //[Meeus] 12.5
-        double elevation = RAD_TO_DEG * Asin(Sin(delta * DEG_TO_RAD) * Sin(latitude * DEG_TO_RAD) + Cos(delta * DEG_TO_RAD) * Cos(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD));
-
+        double elevation = Asin(Sin(delta * DEG_TO_RAD) * Sin(latitude * DEG_TO_RAD) + Cos(delta * DEG_TO_RAD) * Cos(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG - paralax;
+        Debug.Log("elevation: " + elevation);
         //[Meeus] 12.6
-        double azimuth = RAD_TO_DEG * Atan2(-Sin(LHA * DEG_TO_RAD), Cos(latitude * DEG_TO_RAD) * Tan(delta * DEG_TO_RAD) - Sin(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD));
-
+        double azimuth = Clamp360(Atan2(-Sin(LHA * DEG_TO_RAD), Cos(latitude * DEG_TO_RAD) * Tan(delta * DEG_TO_RAD) - Sin(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG);
+        Debug.Log("azimuth: " + azimuth);
         return (azimuth, elevation, distance);
     }
 

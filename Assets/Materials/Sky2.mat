@@ -60,7 +60,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _StarCubeMap:
-        m_Texture: {fileID: 8900000, guid: 6649796662ef76b4f9dea448588a8efa, type: 3}
+        m_Texture: {fileID: 8900000, guid: 461f85dc8d8b73c46bb99c3e007fd2df, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints:
@@ -87,7 +87,7 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
-    - _StarExposure: 1
+    - _StarExposure: 2
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
