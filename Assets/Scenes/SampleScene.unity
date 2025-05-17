@@ -180,7 +180,7 @@ MonoBehaviour:
   UTC: 3
   dayLenght: 60
   updateRate: 0.1
-  dayNightCycle: 1
+  dayNightCycle: 0
 --- !u!4 &105867036
 Transform:
   m_ObjectHideFlags: 0
@@ -283,7 +283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 130938617}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.031112246, y: 0.744718, z: -0.034802914, w: -0.66574466}
+  m_LocalRotation: {x: 0.1714549, y: 0.7840761, z: -0.247743, w: 0.5426337}
   m_LocalPosition: {x: -2.9904518, y: -1.26, z: 0.4413967}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

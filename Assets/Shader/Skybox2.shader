@@ -1,3 +1,5 @@
+//[Nishita 1993] http://nishitalab.org/user/nis/cdrom/sig93_nis.pdf
+//[Nishita 2000] https://www.researchgate.net/publication/242513955_Display_method_of_the_sky_color_taking_into_account_multiple_scattering
 Shader "Custom/Skybox2"
 {
     Properties
@@ -74,13 +76,13 @@ Shader "Custom/Skybox2"
                 float3 viewDirection             : TEXCOORD0;
             };
             
-            //Fr(θ) = (3/4π)(1 + cos²θ) [Nishita 2000]
+            //[Nishita 2000] Page 7
             float rayleighPhaseFunction(float cosTheta)
             {
                 return 0.75 * (1.0 + pow(cosTheta,2));
             }
 
-            //Fm(θ) = (3 * (1 - g²) * 1 + cos²θ) / ((2 + g²) * (1 + g² - 2 * g * cosθ)^1.5) Formula 5 http://nishitalab.org/user/nis/cdrom/sig93_nis.pdf
+            //[Nishita 1993] Formula 5
             float miePhaseFunction(float cosTheta)
             {
                 return 3 * (1 - _MieG * _MieG) * (1 + pow(cosTheta,2)) / pow(2 * (2 + _MieG * _MieG) * (1 + _MieG * _MieG - 2 * _MieG * cosTheta),1.5);
@@ -112,9 +114,22 @@ Shader "Custom/Skybox2"
                 return -b - sqrt(h);
             }
 
-            //t(s,λ) = βr(λ)∫ρr(l)dl + βm(λ)∫ρm(l)dl [Nishita 2000 Formula 2]
-            bool calculateOpticalLength(float3 observerPosition, float2 atmosphereIntersection, out float rayleighOpticalLength, out float mieOpticalLength)
+            float getMieDensity(float height){
+                return exp(-height / _MieScaleHeight);
+            }
+
+            float getRayDensity(float height){
+                return exp(-height / _RayleighScaleHeight);
+            }
+
+            float GetAltitude(float3 point1){
+                return length(point1) - _EarthRadius;
+            }
+
+            //[Nishita 2000] Formula 2
+            bool calculateOpticalLength(float3 observerPosition, out float rayleighOpticalLength, out float mieOpticalLength)
             {
+                float2 atmosphereIntersection = calculateRayAtmosphereIntersection(observerPosition, _SunDir, _AtmosphereRadius);
                 float segmentLength = atmosphereIntersection.y  / (float)_NumLightSamples;
 
                 float resultMie = 0;
@@ -122,13 +137,13 @@ Shader "Custom/Skybox2"
 
                 for (int i = 0; i < _NumLightSamples; i++)
                 {
-                    float3 samplePosition = observerPosition +  segmentLength * (i + 0.5) * _SunDir;
-                    float height = length(samplePosition) - _EarthRadius;
+                    float3 samplePoint = observerPosition +  segmentLength * i * _SunDir;
+                    float height = GetAltitude(samplePoint);
 
                     if (height < 0) return false;
 
-                    resultRay += exp(-height / _RayleighScaleHeight) * segmentLength;
-                    resultMie += exp(-height / _MieScaleHeight) * segmentLength;
+                    resultRay += getRayDensity(height) * segmentLength;
+                    resultMie += getMieDensity(height) * segmentLength;
                 }
 
                 rayleighOpticalLength = resultRay;
@@ -136,7 +151,7 @@ Shader "Custom/Skybox2"
                 return true;
             }
 
-            //Iv(λ) = ∫ Is(λ) * R(λ,s,θ) * exp(-t(s,λ)-t(s',λ))ds [Nishita 2000 Formula 1]
+            //[Nishita 2000] Formula 1
             float3 calculateLightIntensity(float3 origin, float3 direction){
                 float2 intersectDistance = calculateRayAtmosphereIntersection(origin, direction, _AtmosphereRadius);
 
@@ -157,30 +172,28 @@ Shader "Custom/Skybox2"
 
                 for(int i = 0; i < _NumScatteringSamples; i++){
                     //add 0.5 to one to be at the middle of the sample
-                    float3 samplePosition = origin + segmentLength * (i + 0.5) * direction;
-                    float height = length(samplePosition) - _EarthRadius;
+                    float3 samplePoint = origin + segmentLength * (i + 0.5) * direction;
+                    float height = GetAltitude(samplePoint);
 
                     //dencity at the sample point
-                    float pr = exp(-height / _RayleighScaleHeight) * segmentLength;
-                    float pm = exp(-height / _MieScaleHeight) * segmentLength;
+                    float pr = getRayDensity(height) * segmentLength;
+                    float pm = getMieDensity(height) * segmentLength;
 
                     opticalDepthRayToSample += pr;
                     opticalDepthMieToSample += pm;
 
-                    float2 atmosphereIntersection = calculateRayAtmosphereIntersection(samplePosition, _SunDir, _AtmosphereRadius);
-
                     float opticalLenghtRayAtmosphere = 0.0;
                     float opticalLenghtMieAtmosphere = 0.0;
 
-                    if(!calculateOpticalLength(samplePosition, atmosphereIntersection, opticalLenghtRayAtmosphere, opticalLenghtMieAtmosphere))
+                    if(!calculateOpticalLength(samplePoint, opticalLenghtRayAtmosphere, opticalLenghtMieAtmosphere))
                     {
                         continue;
                     }
 
-                    //R(λ,s,θ) = Kr(λ) * ρr(s) * Fr(θ) + Km(λ) * ρm(s) * Fm(θ)
+                    //[Nishita 2000] Page 7 (R formula)
                     float3 r = _Br * pr * Fr + _Bm * pm * Fm;
 
-                    //t(s,λ) = βr(λ)∫ρr(l)dl + βm(λ)∫ρm(l)dl
+                    //[Nishita 2000] Formula 2
                     float3 t = _Br * opticalDepthRayToSample + _Bm * opticalDepthMieToSample;
                     float3 t1 = _Br / 0.9 * _Br * opticalLenghtRayAtmosphere + _Bm * opticalLenghtMieAtmosphere;
 

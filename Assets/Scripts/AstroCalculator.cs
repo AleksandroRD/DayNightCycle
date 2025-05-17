@@ -17,28 +17,28 @@ public static class AstroCalsulator
         double JD = calculateJulianDay(date.ToUniversalTime());
 
         // [Meeus] 24.1
-        double T = (JD - JULIAN_EPOCH) / JULIAN_CENTURY; 
+        double T = (JD - JULIAN_EPOCH) / JULIAN_CENTURY;
 
         //mean longitude of the Sun [Meeus] 24.2
-        double L = 280.46645 + 36000.76983 * T + 0.0003032 * Pow(T,2);
+        double L = 280.46645 + 36000.76983 * T + 0.0003032 * Pow(T, 2);
 
         //The mean anomaly of the Sun [Meeus] 24.3
-        double M = 357.52910 + 35999.05030 * T - 0.0001559 * Pow(T,2) - 0.00000048 * Pow(T,3);
+        double M = 357.52910 + 35999.05030 * T - 0.0001559 * Pow(T, 2) - 0.00000048 * Pow(T, 3);
 
         //Eccentricity of the Earth's orbit [Meeus] 24.4
-        double e = 0.016708617 - 0.000042037 * T - 0.0000001236 * Pow(T,2);
+        double e = 0.016708617 - 0.000042037 * T - 0.0000001236 * Pow(T, 2);
 
         //Sun's equation of center C [Meeus] Page 152
-        double C = (1.914600 - 0.004817 * T - 0.000014 * T * T) * Sin(M * DEG_TO_RAD)+ (0.019993 - 0.000101 * T) * Sin(2 * M * DEG_TO_RAD) + 0.000290 * Sin(3 *M * DEG_TO_RAD);
+        double C = (1.914600 - 0.004817 * T - 0.000014 * T * T) * Sin(M * DEG_TO_RAD) + (0.019993 - 0.000101 * T) * Sin(2 * M * DEG_TO_RAD) + 0.000290 * Sin(3 * M * DEG_TO_RAD);
 
         //Sun's true longitude [Meeus] Page 152
         double lambda = L + C;
 
         //Sun's true anomaly [Meeus] Page 152
         double v = M + C;
-        
+
         //Obliquity of ecliptic [Meeus] 21.2
-        double epsilon = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * Pow(T,2) - 0.001813 * Pow(T,3)) / 3600.0;
+        double epsilon = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * Pow(T, 2) - 0.001813 * Pow(T, 3)) / 3600.0;
 
         //[Meeus] Page 9. This is derevived from the formula on the page
         double sinDelta = Sin(epsilon * DEG_TO_RAD) * Sin(lambda * DEG_TO_RAD);
@@ -50,7 +50,7 @@ public static class AstroCalsulator
         double RA = Atan2(y, x) * RAD_TO_DEG;
 
         //sidereal time at Greenwich [Meeus] 11.4
-        double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T,2) - Pow(T,3) / 38710000.0;
+        double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T, 2) - Pow(T, 3) / 38710000.0;
 
         //Local Hour angle [Meeus] Page 88. Formula Derivated from local hour angle formula
         double LHA = ST + longitude - RA;
@@ -61,8 +61,8 @@ public static class AstroCalsulator
         double azimuth = Clamp360(Atan2(-Sin(LHA * DEG_TO_RAD), Cos(latitude * DEG_TO_RAD) * Tan(delta * DEG_TO_RAD) - Sin(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG);
         //[Meeus] Page 152. Value is converted from astronomical units to km by myltiplying by 149597870.7
         double distance = 1.000001018 * (1 - Pow(e, 2)) / (1 + e * Cos(v * DEG_TO_RAD)) * 149597870.7;
-        
-        return (azimuth,elevation,distance);
+
+        return (azimuth, elevation, distance);
     }
 
     public static (double Azimuth, double Elevation, double Distance) CalculateMoonPosition(DateTime date, double longitude, double latitude)
@@ -113,14 +113,19 @@ public static class AstroCalsulator
             double termMMoon = terms[2] * MA;
             double termF = terms[3] * F;
 
-            if(terms[1] == 1 || terms[1] == -1){
+            if (terms[1] == 1 || terms[1] == -1)
+            {
                 termMSun = terms[1] * M * E;
-            }else if(terms[1] == 2 || terms[1] == -2){
-                termMSun = terms[1] * M * Pow(E,2);
-            }else{
+            }
+            else if (terms[1] == 2 || terms[1] == -2)
+            {
+                termMSun = terms[1] * M * Pow(E, 2);
+            }
+            else
+            {
                 termMSun = terms[1] * M;
             }
-            
+
             double sumLAddition = termD + termMSun + termMMoon + termF;
             double sumRAddition = terms[5] * Cos(sumLAddition * DEG_TO_RAD);
             sumLAddition = terms[4] * Sin(sumLAddition * DEG_TO_RAD);
@@ -131,11 +136,16 @@ public static class AstroCalsulator
             termMMoon = terms[2] * MA;
             termF = terms[3] * F;
 
-            if(terms[1] == 1 || terms[1] == -1){
+            if (terms[1] == 1 || terms[1] == -1)
+            {
                 termMSun = terms[1] * M * E;
-            }else if(terms[1] == 2 || terms[1] == -2){
-                termMSun = terms[1] * M * Pow(E,2);
-            }else{
+            }
+            else if (terms[1] == 2 || terms[1] == -2)
+            {
+                termMSun = terms[1] * M * Pow(E, 2);
+            }
+            else
+            {
                 termMSun = terms[1] * M;
             }
 
@@ -177,19 +187,18 @@ public static class AstroCalsulator
         double epsilon = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * T * T - 0.001813 * T * T * T) / 3600;
 
         //[Meeus] Page 9. This block is derevived from the formula on the page
-    
         double delta = Asin(Sin(epsilon * DEG_TO_RAD) * Cos(beta * DEG_TO_RAD) * Sin(lambda * DEG_TO_RAD) + Cos(epsilon * DEG_TO_RAD) * Sin(beta * DEG_TO_RAD)) * RAD_TO_DEG;
-        
+
         double y = Sin(lambda * DEG_TO_RAD) * Cos(epsilon * DEG_TO_RAD) - Tan(beta * DEG_TO_RAD) * Sin(epsilon * DEG_TO_RAD);
         double x = Cos(lambda * DEG_TO_RAD);
-        
+
         double RA = Atan2(y, x) * RAD_TO_DEG;
 
         //sidereal time at Greenwich [Meeus] 11.4
-        double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T,2) - Pow(T,3) / 38710000.0;
+        double ST = 280.46061837 + 360.98564736629 * (JD - JULIAN_EPOCH) + 0.000387933 * Pow(T, 2) - Pow(T, 3) / 38710000.0;
 
         //Local Hour angle [Meeus] Page 88. Formula Derivated from local hour angle formula
-        double LHA = ST + longitude - RA; 
+        double LHA = ST + longitude - RA;
 
         //[Meeus] 12.5
         double elevation = Asin(Sin(delta * DEG_TO_RAD) * Sin(latitude * DEG_TO_RAD) + Cos(delta * DEG_TO_RAD) * Cos(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG - paralax;
