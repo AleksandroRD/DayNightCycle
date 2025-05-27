@@ -169,6 +169,7 @@ Shader "Custom/Skybox1"
                     float3 samplePosition = origin + (segmentLength * s * 0.5) * direction;
                     float height = length(samplePosition) - _EarthRadius;
 
+                    if(height < 0){return (0,0,0);}
                     // compute optical depth for light
                     float hr = exp(-height / _Hr) * segmentLength;
                     float hm = exp(-height / _Hm) * segmentLength;

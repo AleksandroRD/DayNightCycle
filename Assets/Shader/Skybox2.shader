@@ -4,9 +4,9 @@ Shader "Custom/Skybox2"
 {
     Properties
     {
-        _EarthRadius("Earth Radius", Float) = 6378000.0 //https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
-        _AtmosphereRadius("Atmosphere Radius", Float) = 6478000.0 //https://www.grc.nasa.gov/www/k-12/airplane/atmosphere.html
-        _ObserverAltitude("Observer Altitude", Float) = 2.0
+        _EarthRadius("Earth Radius(m)", Float) = 6378000.0 //https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
+        _AtmosphereRadius("Atmosphere Radius(m)", Float) = 6478000.0 //https://www.grc.nasa.gov/www/k-12/airplane/atmosphere.html
+        _ObserverAltitude("Observer Altitude(m)", Float) = 2.0
 
         _MieG("Mie Anisotropy", Float) = 0.760
         _RayleighScaleHeight("Rayleigh Scale Height", Float) = 8000.0 //https://odr.chalmers.se/server/api/core/bitstreams/c188a150-4d52-4456-b257-2e95156dd8d3/content
@@ -15,12 +15,17 @@ Shader "Custom/Skybox2"
         _Br("Rayleight RGB Scattering", Vector) = (0.0000058, 0.0000135, 0.0000331, 0)
         _Bm("Mie RGB Scattering", Vector) = (0.000021, 0.000021, 0.000021, 0)
 
-        _solarRadiation("Spectral distribution of extraterrestrial solar radiation", Vector) = (1.6, 1.9, 2.0, 0)
         _NumScatteringSamples("Number of Scattering Samples", Integer) = 32
         _NumLightSamples("Number of Light Samples", Integer) = 16
 
         [NoScaleOffset] _StarCubeMap ("Star cube map", Cube) = "black" {}
         _StarExposure ("Star exposure", Range(-16, 16)) = 0
+
+        _SunRadius("Sun Radius", Float) = 696340.0 //https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html
+        _SunDistance("Distance to the Sun(km)", Float) = 151530000.0 //https://nssdc.gsfc.nasa.gov/planetary/factsheet/sunfact.html
+        _MoonDistance("Distance to the Moon(km)", Float) = 385000000.6 //https://science.nasa.gov/moon/facts/
+        _MoonRadius("Moon Radius", Float) = 1737000.4 //https://science.nasa.gov/moon/facts/
+
     }
     SubShader
     {
@@ -43,6 +48,13 @@ Shader "Custom/Skybox2"
 
             //Sun Options
             float3 _SunDir;
+            float _SunRadius;
+            float _SunDistance;
+
+            //Moon Options
+            float _MoonDistance;
+            float _MoonRadius;
+            float3 _MoonDir;
 
             //Earth options
             float _EarthRadius;
@@ -58,7 +70,6 @@ Shader "Custom/Skybox2"
             float _MieG;
             float3 _Br;
             float3 _Bm;
-            float3 _solarRadiation;
             
             //Stars
             samplerCUBE _StarCubeMap;
@@ -75,7 +86,13 @@ Shader "Custom/Skybox2"
                 float4 vertexPosition            : SV_POSITION;
                 float3 viewDirection             : TEXCOORD0;
             };
-            
+
+            float GetSunMask(float sunViewDot, float sunRadius)
+            {
+                float stepRadius = 1 - sunRadius * sunRadius;
+                return step(stepRadius, sunViewDot);
+            }
+
             //[Nishita 2000] Page 7
             float rayleighPhaseFunction(float cosTheta)
             {
@@ -85,6 +102,8 @@ Shader "Custom/Skybox2"
             //[Nishita 1993] Formula 5
             float miePhaseFunction(float cosTheta)
             {
+                //return (3.0 * (1.0 - _MieG * _MieG) / 2.0 * (2.0 + _MieG * _MieG)) * ((1 + pow(cosTheta,2)) / pow(1.0 + _MieG * _MieG - 2.0 * _MieG * pow(cosTheta,2),1.5));
+
                 return 3 * (1 - _MieG * _MieG) * (1 + pow(cosTheta,2)) / pow(2 * (2 + _MieG * _MieG) * (1 + _MieG * _MieG - 2 * _MieG * cosTheta),1.5);
             }
 
@@ -219,11 +238,26 @@ Shader "Custom/Skybox2"
                 float3 observerPosition = float3(0, _EarthRadius + _ObserverAltitude, 0);
 
                 float sunViewDot = dot(_SunDir, viewDirection);
+                float sunViewDot01 = (sunViewDot + 1.0) * 0.5;
 
-                float3 starColor = texCUBE(_StarCubeMap, IN.viewDirection).xyz;
-                starColor *= (1 - sunViewDot) * saturate( -_SunDir.y) * exp2(_StarExposure);
+                //float3 starColor = texCUBE(_StarCubeMap, IN.viewDirection).xyz;
+                //starColor *= (1 - sunViewDot01) * saturate( -_SunDir.y) * exp2(_StarExposure);
+
+                //Moon
+                float moonIntersection = sphereIntersection(observerPosition, viewDirection, _MoonDir * _MoonDistance, _MoonRadius);
+                float moonMask = moonIntersection > -1? 1 : 0;
+                float3 moonNormal = normalize(_MoonDir - viewDirection * moonIntersection);
+                float moonNdotL = saturate(dot(moonNormal, _SunDir));
+                float3 moonColor = moonMask * moonNdotL;
+
+
+                //Sun
+                float sunMask = sunViewDot  > cos(asin(_SunRadius*2 / _SunDistance)) ? 1 : 0;
+                float3 sunColor = (1,0,1) * sunMask;
+
+                //Sky
                 float3 skycolor = calculateLightIntensity(observerPosition, viewDirection);
-                float3 color = skycolor + starColor;
+                float3 color = skycolor + sunColor + moonColor;
 
                 return float4(color, 1);
             }
