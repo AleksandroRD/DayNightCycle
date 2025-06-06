@@ -132,7 +132,7 @@ Shader "Custom/Skybox3"
                     float3  samplePoint  = point1 + i * stepSize * direction;
                     float   height       = GetAltitude(samplePoint);
 
-                    if(height < 0){ return(0,0,0);}
+                    if(height < 0){ continue; }
                     
                     float   currentMie   = getMieDensity(height);
                     float   currentRay   = getRayDensity(height);
@@ -198,10 +198,9 @@ Shader "Custom/Skybox3"
 
                     sumRay += (currentRay + previousRay) * 0.5 * stepSize;
                     sumMie += (currentMie + previousMie) * 0.5 * stepSize;
-                    //if(i == 0) return currentRay + previousRay;
+
                     previousRay = currentRay;
                     previousMie = currentMie;
-                    //if(i == 2) return currentMie;
                 }
 
                 float cosTheta = dot(_SunDir, direction);
@@ -227,8 +226,9 @@ Shader "Custom/Skybox3"
                 float3 viewDirection = normalize(IN.viewDirection);
                 float3 observerPosition = float3(0, _EarthRadius + _ObserverAltitude, 0);
 
-                float3 color = calculateSingleScatering(observerPosition, viewDirection)*20;
+                float3 color = calculateSingleScatering(observerPosition, viewDirection);
 
+                color = color/(1 + color);
                 return float4(color, 1);
             }
 

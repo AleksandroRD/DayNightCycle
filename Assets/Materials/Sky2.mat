@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Sky2
-  m_Shader: {fileID: 4800000, guid: 5800e6d09c880284e9e1e4c39b9f3d14, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0119860b30a0a1a41b12515e95576085, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -77,9 +77,11 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0
-    - _MieG: 0.76
+    - _MieG: 0.68
     - _MieScaleHeight: 1200
     - _Mode: 0
+    - _MoonDistance: 385000000
+    - _MoonRadius: 1737000.4
     - _ObserverAltitude: 2
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -88,6 +90,8 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _StarExposure: 2
+    - _SunDistance: 14960000
+    - _SunRadius: 695700
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:

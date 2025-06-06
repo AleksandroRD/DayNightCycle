@@ -182,7 +182,7 @@ public static class AstroCalsulator
 
         //Moon paralax [Meeus] Page 308
         double paralax = Asin(6378.14 / distance) * RAD_TO_DEG;
-        Debug.Log("paralax: " + paralax);
+
         //Obliquity of ecliptic [Meeus] 21.2
         double epsilon = 23.0 + 26.0 / 60.0 + 21.448 / 3600.0 - (46.8150 * T + 0.00059 * T * T - 0.001813 * T * T * T) / 3600;
 
@@ -202,10 +202,10 @@ public static class AstroCalsulator
 
         //[Meeus] 12.5
         double elevation = Asin(Sin(delta * DEG_TO_RAD) * Sin(latitude * DEG_TO_RAD) + Cos(delta * DEG_TO_RAD) * Cos(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG - paralax;
-        Debug.Log("elevation: " + elevation);
+
         //[Meeus] 12.6
         double azimuth = Clamp360(Atan2(-Sin(LHA * DEG_TO_RAD), Cos(latitude * DEG_TO_RAD) * Tan(delta * DEG_TO_RAD) - Sin(latitude * DEG_TO_RAD) * Cos(LHA * DEG_TO_RAD)) * RAD_TO_DEG);
-        Debug.Log("azimuth: " + azimuth);
+
         return (azimuth, elevation, distance);
     }
 
